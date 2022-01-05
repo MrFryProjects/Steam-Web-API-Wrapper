@@ -1,4 +1,5 @@
 import ISteamUser
+import ISteamNews
 
 api = 
 #steamid = 
