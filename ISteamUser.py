@@ -8,6 +8,47 @@ import json
 def request(url):
     return urllib.request.urlopen(url)
 
+
+class GetFriendList:
+    def __init__(self, steamid, api_key):
+        self.steamid = steamid
+        self.api_key = api_key
+        self.data = None
+        self.steamids = []
+        self.relationship = []
+        self.friend_since = []
+        return
+
+    def raw(self):
+        _url_components = ['http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=',self.api_key,'&steamid=',self.steamid,'&relationship=friend']
+        url = ''.join(_url_components)
+        raw = request(url)
+        return raw
+
+    def _data(self):
+        self.data = json.loads(self.raw().read().decode('utf8'))
+
+    def _steamids(self, n):
+        self.steamids.append(n['steamid'])
+
+    def _relationship(self, n):
+        self.relationship.append(n['relationship'])
+
+    def _friend_since(self, n):
+        self.friend_since.append(n['friend_since'])
+
+    def _data_compiler(self):
+        self._data()
+
+        for i in self.data['friendslist']['friends']:
+            self._steamids(i)
+            self._relationship(i)
+            self._friend_since(i)
+
+    def compile(self):
+        self._data_compiler()
+
+
 class GetPlayerSummaries:
     def __init__(self, steamid, api_key):
         self.steamid = steamid
@@ -27,6 +68,7 @@ class GetPlayerSummaries:
         self.timecreated = []
         self.personastateflags = []
         self.loccountrycode = []
+        return
 
     def raw(self):
         _steam_id_string = '+'.join(self.steamid)
@@ -102,44 +144,3 @@ class GetPlayerSummaries:
 
     def compile(self):
         self._data_compiler()
-
-
-
-class GetFriendList:
-    def __init__(self, steamid, api_key):
-        self.steamid = steamid
-        self.api_key = api_key
-        self.data = None
-        self.steamids = []
-        self.relationship = []
-        self.friend_since = []
-
-    def raw(self):
-        _url_components = ['http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=',self.api_key,'&steamid=',self.steamid,'&relationship=friend']
-        url = ''.join(_url_components)
-        raw = request(url)
-        return raw
-
-    def _data(self):
-        self.data = json.loads(self.raw().read().decode('utf8'))
-
-    def _steamids(self, n):
-        self.steamids.append(n['steamid'])
-
-    def _relationship(self, n):
-        self.relationship.append(n['relationship'])
-
-    def _friend_since(self, n):
-        self.friend_since.append(n['friend_since'])
-
-    def _data_compiler(self):
-        self._data()
-
-        for i in self.data['friendslist']['friends']:
-            self._steamids(i)
-            self._relationship(i)
-            self._friend_since(i)
-
-    def compile(self):
-        self._data_compiler()
-
