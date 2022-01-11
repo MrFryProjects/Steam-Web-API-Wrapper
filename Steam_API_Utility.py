@@ -1,19 +1,16 @@
 import ISteamUser
 import ISteamNews
 import ISteamUserStats
+import IPlayerService
 
-api = 
+#api_key = 
 #steamid = 
-steamid = 
+#appid = 440
 
 
-y = ISteamUser.GetFriendList(steamid, api).raw().read()
-z = ISteamUser.GetFriendList(steamid, api)
-z.compile()
-#print(y)
-print(z.steamids)
-#print(z)
-
+x = IPlayerService.GetRecentlyPlayedGames(steamid, api_key)
+x.compile()
+print(x.img_icon_url)
 
 #https://partner.steamgames.com/doc/webapi
 
