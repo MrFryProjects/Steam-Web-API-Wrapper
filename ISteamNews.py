@@ -23,6 +23,7 @@ class GetNewsForApp:
         self.date = []
         self.feedname = []
         self.feed_type = []
+        return
 
     def raw(self):
         _url_components = ['http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?','appid=',self.appid,'&maxlength=',self.maxlength]
