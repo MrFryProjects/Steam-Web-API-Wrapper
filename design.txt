@@ -1,0 +1,33 @@
+Overview:
+
+Steam Web API (https://steamcommunity.com/dev) consists of four modules to pull data from various steam databases.
+This data requires an API key and is accessed via GET/POST (https://partner.steamgames.com/doc/webapi_overview)
+Data can be returned in json, xml, or vdf format
+
+Goals:
+
+To create a wrapper for the Steam Web API in Python.
+Allow individual modules to be imported as-needed.
+Allow iterative calling and batch-requests.
+
+Modules:
+
+handler.py
+- Is responsible for functions used across all four API modules
+
+ISteamNews.py
+- Calls to news feeds for each Steam game
+
+ISteamUserStats.py
+- Calls to global stat information by game
+
+ISteamUser.py
+- Calls to provide information about Steam users
+
+ITFItems_440.py
+- Calls to provide player item data
+
+Notes:
+
+Much of the Steam Web API is restricted to registered developer partners and may not be implimented, including
+above listed functionality when applicable.
