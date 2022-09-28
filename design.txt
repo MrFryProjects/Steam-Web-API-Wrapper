@@ -31,3 +31,7 @@ Notes:
 
 Much of the Steam Web API is restricted to registered developer partners and may not be implimented, including
 above listed functionality when applicable.
+
+VIA Steam (https://developer.valvesoftware.com/wiki/Steam_Web_API#Interfaces_and_method)
+All interfaces and method are self-documented through the ISteamWebAPIUtil/GetSupportedAPIList call. This can be found here.
+When passed a key=<your API key> parameter, GetSupportedAPIList will show all APIs that your key can access. Without it (as above), it only displays APIs that do not require an API key. 
