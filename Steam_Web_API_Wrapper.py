@@ -21,26 +21,25 @@ class Steam:
         except urllib.error.HTTPError:
             print(f'HTTP Error: {url}')
 
-    def url_builder(self,/, module: str, interface: str, api_version: int, *,
-                   endpoint: str="http://api.steampowered.com", **kwargs):
+    def url_builder(self, module: str, 
+                        interface: str, api_version: int, *, 
+                        endpoint: str="http://api.steampowered.com",
+                        service_interface: bool=False, **kwargs):
         api_version = f'v{api_version}'
         url_start = '/'.join([endpoint, module, interface, api_version])
-        url_components = [url_start, '/?', f'key={self.api_key}']
-        for name, val in kwargs.items():
-            url_components.append(f'&{name}={val}')
-        url_components.append(f'&format={self.format}')
-        return ''.join(url_components)
-
-    def url_builder_service(self, module: str, 
-                            interface: str, api_version: int, *, 
-                            endpoint: str="http://api.steampowered.com",
-                           **kwargs):
-        api_version = f'v{api_version}'
-        url_start = '/'.join([endpoint, module, interface, api_version])
-        url_components = [url_start, f'/?key={self.api_key}', 
-                          f'&format={self.format}&input_json=']
-        url_components.append(urllib.parse.quote(json.dumps(kwargs)))
-        return ''.join(url_components)
+        if service_interface:
+            url_components = [url_start, f'/?key={self.api_key}', 
+                              f'&format={self.format}&input_json=']
+            url_components.append(urllib.parse.quote(json.dumps(kwargs)))
+            return ''.join(url_components)
+        else:
+            url_components = [url_start, '/?', f'key={self.api_key}']
+            for name, val in kwargs.items():
+                url_components.append(f'&{name}={val}')
+            url_components.append(f'&format={self.format}')
+            return ''.join(url_components)
+            
+    #########
 
     # IPlayerService
     # https://partner.steamgames.com/doc/webapi/IPlayerService
@@ -59,7 +58,8 @@ class Steam:
         module = "IPlayerService"
         interface = "GetOwnedGames"
         api_version = 1
-        url = self.url_builder_service(module, interface, api_version, 
+        url = self.url_builder(module, interface, api_version, 
+                        service_interface=True, 
                         steamid=steamid, include_appinfo=include_appinfo,
                         include_played_free_games=include_played_free_games, 
                         appids_filter=appids_filter)
